@@ -163,6 +163,31 @@
             max-width: 560px;
         }
 
+
+        /* --- Team section --- */
+        .team {
+            margin: 40px 48px 56px;
+            padding: 28px;
+            max-width: 960px;
+            border: 1px solid rgba(154, 176, 194, 0.18);
+            background: rgba(17, 34, 49, 0.55);
+            border-radius: 8px;
+            backdrop-filter: blur(2px);
+        }
+
+        .team h2 {
+            font-size: clamp(24px, 3vw, 34px);
+            font-weight: 300;
+            margin-bottom: 16px;
+        }
+
+        .team p {
+            color: var(--text-secondary);
+            line-height: 1.7;
+            font-size: 16px;
+            max-width: 760px;
+        }
+
         /* --- Footer --- */
         footer {
             padding: 32px 48px;
@@ -443,8 +468,8 @@
     <div class="page">
 
         <nav>
-            <a href="/" class="logo-text">MoonPac</a>
-            <button class="nav-contact" onclick="openContact()">Contact</button>
+            <a href="index.html" class="logo-text">MoonPac</a>
+            <a class="nav-contact" href="#team">Team</a>
         </nav>
 
         <main class="hero">
@@ -455,6 +480,16 @@
                 We back outstanding technology companies at IPO and beyond &mdash; bridging the gap between Israel&rsquo;s world-class innovation and the public markets where long-term value is built.
             </p>
         </main>
+
+
+        <section class="team" id="team">
+            <div class="hero-label">Team</div>
+            <h2>Built by operators and long-term investors</h2>
+            <p>
+                MoonPac brings together public-market discipline and deep familiarity with the Israeli technology ecosystem.
+                Our team partners with founders and management teams from IPO preparation through long-term market participation.
+            </p>
+        </section>
 
         <footer>
             <div class="footer-locations">
@@ -477,7 +512,7 @@
         <div class="page">
 
             <nav>
-                <a href="/" class="logo-text">MoonPac</a>
+                <a href="index.html" class="logo-text">MoonPac</a>
                 <button class="nav-back" onclick="closeContact()">Back</button>
             </nav>
 
