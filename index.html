@@ -1,0 +1,583 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MoonPac Capital</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap');
+
+        *, *::before, *::after {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --bg: #0c1a24;
+            --surface: #112231;
+            --text-primary: #f0f2f4;
+            --text-secondary: #9ab0c2;
+            --accent: #d4a65a;
+            --accent-light: rgba(212, 166, 90, 0.15);
+            --teal: #2a8a8a;
+            --teal-dim: rgba(42, 138, 138, 0.12);
+        }
+
+        html {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--bg);
+            color: var(--text-primary);
+            -webkit-font-smoothing: antialiased;
+        }
+
+        body {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            overflow-x: hidden;
+        }
+
+        /* --- Hero background image --- */
+        .hero-bg {
+            position: fixed;
+            inset: 0;
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        .hero-bg img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            object-position: center 30%;
+        }
+
+        .hero-bg::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background:
+                linear-gradient(
+                    to bottom,
+                    rgba(12, 26, 36, 0.92) 0%,
+                    rgba(12, 26, 36, 0.7) 25%,
+                    rgba(12, 26, 36, 0.35) 50%,
+                    rgba(12, 26, 36, 0.55) 75%,
+                    rgba(12, 26, 36, 0.95) 100%
+                );
+        }
+
+        /* --- Layout --- */
+        .page {
+            position: relative;
+            z-index: 1;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        /* --- Nav --- */
+        nav {
+            padding: 36px 48px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .logo-text {
+            font-size: 22px;
+            font-weight: 600;
+            letter-spacing: 6px;
+            text-transform: uppercase;
+            color: var(--text-primary);
+            text-decoration: none;
+        }
+
+        .nav-contact {
+            font-size: 13px;
+            font-weight: 400;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            color: var(--text-secondary);
+            text-decoration: none;
+            padding: 10px 24px;
+            border: 1px solid rgba(154, 176, 194, 0.2);
+            border-radius: 4px;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            background: none;
+        }
+
+        .nav-contact:hover {
+            border-color: var(--accent);
+            color: var(--accent);
+        }
+
+        /* --- Hero content --- */
+        .hero {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            padding: 0 48px;
+            max-width: 960px;
+        }
+
+        .hero-label {
+            font-size: 12px;
+            font-weight: 500;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            color: var(--accent);
+            margin-bottom: 28px;
+        }
+
+        .hero h1 {
+            font-size: clamp(30px, 4.2vw, 52px);
+            font-weight: 300;
+            line-height: 1.3;
+            color: var(--text-primary);
+            max-width: 780px;
+        }
+
+        .hero h1 em {
+            font-style: normal;
+            color: var(--accent);
+            font-weight: 400;
+        }
+
+        .divider-line {
+            width: 64px;
+            height: 1px;
+            background: var(--accent);
+            margin: 36px 0;
+            opacity: 0.5;
+        }
+
+        .hero-sub {
+            font-size: 17px;
+            font-weight: 300;
+            line-height: 1.75;
+            color: var(--text-secondary);
+            max-width: 560px;
+        }
+
+        /* --- Footer --- */
+        footer {
+            padding: 32px 48px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border-top: 1px solid rgba(154, 176, 194, 0.08);
+        }
+
+        .footer-locations {
+            display: flex;
+            gap: 36px;
+        }
+
+        .footer-locations span {
+            font-size: 12px;
+            font-weight: 400;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            color: var(--text-secondary);
+        }
+
+        .footer-copy {
+            font-size: 12px;
+            color: rgba(154, 176, 194, 0.4);
+        }
+
+        /* --- Contact page (replaces modal) --- */
+        .contact-page {
+            display: none;
+            position: fixed;
+            inset: 0;
+            z-index: 100;
+            flex-direction: column;
+            min-height: 100vh;
+            overflow-y: auto;
+        }
+
+        .contact-page.active {
+            display: flex;
+        }
+
+        .contact-page nav {
+            padding: 36px 48px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .contact-page .nav-back {
+            font-size: 13px;
+            font-weight: 400;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            color: var(--text-secondary);
+            text-decoration: none;
+            padding: 10px 24px;
+            border: 1px solid rgba(154, 176, 194, 0.2);
+            border-radius: 4px;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            background: none;
+        }
+
+        .contact-page .nav-back:hover {
+            border-color: var(--accent);
+            color: var(--accent);
+        }
+
+        .contact-body {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            padding: 0 48px;
+            max-width: 560px;
+            animation: fadeUp 0.6s ease forwards;
+        }
+
+        .contact-body .hero-label {
+            font-size: 12px;
+            font-weight: 500;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            color: var(--accent);
+            margin-bottom: 16px;
+        }
+
+        .contact-body h2 {
+            font-size: clamp(26px, 3.5vw, 40px);
+            font-weight: 300;
+            line-height: 1.3;
+            color: var(--text-primary);
+            margin-bottom: 8px;
+        }
+
+        .contact-body .contact-sub {
+            font-size: 16px;
+            font-weight: 300;
+            line-height: 1.7;
+            color: var(--text-secondary);
+            margin-bottom: 36px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 12px;
+            font-weight: 500;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            color: var(--text-secondary);
+            margin-bottom: 8px;
+        }
+
+        .form-group input,
+        .form-group textarea {
+            width: 100%;
+            padding: 12px 16px;
+            background: rgba(154, 176, 194, 0.06);
+            border: 1px solid rgba(154, 176, 194, 0.15);
+            border-radius: 6px;
+            color: var(--text-primary);
+            font-family: 'Inter', sans-serif;
+            font-size: 15px;
+            outline: none;
+            transition: border-color 0.2s;
+        }
+
+        .form-group input::placeholder,
+        .form-group textarea::placeholder {
+            color: rgba(154, 176, 194, 0.35);
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus {
+            border-color: var(--accent);
+        }
+
+        .form-group textarea {
+            resize: vertical;
+            min-height: 100px;
+        }
+
+        .form-submit {
+            display: inline-block;
+            padding: 14px 40px;
+            background: var(--accent);
+            color: var(--bg);
+            border: none;
+            border-radius: 4px;
+            font-family: 'Inter', sans-serif;
+            font-size: 13px;
+            font-weight: 500;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            cursor: pointer;
+            transition: background 0.2s;
+            margin-top: 8px;
+        }
+
+        .form-submit:hover {
+            background: #e0b46a;
+        }
+
+        /* --- Success state --- */
+        .form-success {
+            display: none;
+            padding: 0;
+        }
+
+        .form-success .hero-label {
+            margin-bottom: 16px;
+        }
+
+        .form-success h2 {
+            font-size: clamp(26px, 3.5vw, 40px);
+            font-weight: 300;
+            line-height: 1.3;
+            color: var(--text-primary);
+            margin-bottom: 12px;
+        }
+
+        .form-success p {
+            font-size: 16px;
+            font-weight: 300;
+            line-height: 1.7;
+            color: var(--text-secondary);
+        }
+
+        .contact-page footer {
+            padding: 32px 48px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border-top: 1px solid rgba(154, 176, 194, 0.08);
+        }
+
+        @media (max-width: 768px) {
+            .contact-page nav {
+                padding: 24px;
+            }
+            .contact-body {
+                padding: 0 24px;
+            }
+            .contact-page .nav-back {
+                font-size: 12px;
+                padding: 8px 16px;
+            }
+            .contact-page footer {
+                padding: 24px;
+                flex-direction: column;
+                gap: 16px;
+                text-align: center;
+            }
+        }
+
+        /* --- Responsive --- */
+        @media (max-width: 768px) {
+            nav {
+                padding: 24px 24px;
+            }
+            .hero {
+                padding: 0 24px;
+            }
+            .hero h1 {
+                font-size: clamp(26px, 6vw, 40px);
+            }
+            footer {
+                padding: 24px;
+                flex-direction: column;
+                gap: 16px;
+                text-align: center;
+            }
+            .nav-contact {
+                font-size: 12px;
+                padding: 8px 16px;
+            }
+            .hero-bg img {
+                object-position: 60% 30%;
+            }
+            .modal {
+                padding: 36px 28px;
+            }
+        }
+
+        /* --- Fade-in animation --- */
+        .fade-in {
+            opacity: 0;
+            transform: translateY(18px);
+            animation: fadeUp 1s ease forwards;
+        }
+
+        .fade-in:nth-child(2) { animation-delay: 0.15s; }
+        .fade-in:nth-child(3) { animation-delay: 0.3s; }
+        .fade-in:nth-child(4) { animation-delay: 0.45s; }
+        .fade-in:nth-child(5) { animation-delay: 0.6s; }
+
+        @keyframes fadeUp {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Hero background -->
+    <div class="hero-bg">
+        <img src="tel-aviv.png" alt="Tel Aviv skyline" />
+    </div>
+
+    <!-- Page content -->
+    <div class="page">
+
+        <nav>
+            <a href="/" class="logo-text">MoonPac</a>
+            <button class="nav-contact" onclick="openContact()">Contact</button>
+        </nav>
+
+        <main class="hero">
+            <div class="hero-label fade-in">IPO Anchor Fund</div>
+            <h1 class="fade-in">Anchoring the next generation of <em>Israeli tech companies</em> into public markets</h1>
+            <div class="divider-line fade-in"></div>
+            <p class="hero-sub fade-in">
+                We back outstanding technology companies at IPO and beyond &mdash; bridging the gap between Israel&rsquo;s world-class innovation and the public markets where long-term value is built.
+            </p>
+        </main>
+
+        <footer>
+            <div class="footer-locations">
+                <span>New York</span>
+                <span>Tel Aviv</span>
+            </div>
+            <div class="footer-copy">&copy; 2026 MoonPac Capital. All rights reserved.</div>
+        </footer>
+
+    </div>
+
+    <!-- Contact page -->
+    <div class="contact-page" id="contact-page">
+
+        <!-- Same background as landing -->
+        <div class="hero-bg">
+            <img src="tel-aviv.png" alt="Tel Aviv skyline" />
+        </div>
+
+        <div class="page">
+
+            <nav>
+                <a href="/" class="logo-text">MoonPac</a>
+                <button class="nav-back" onclick="closeContact()">Back</button>
+            </nav>
+
+            <main class="contact-body">
+
+                <!-- Form -->
+                <form id="contact-form" name="contact" method="POST" data-netlify="true" action="/">
+                    <input type="hidden" name="form-name" value="contact" />
+                    <input type="hidden" name="_to" value="yedidiah@aleph.vc" />
+
+                    <div class="hero-label">Get in Touch</div>
+                    <h2>We'd like to hear from you</h2>
+                    <p class="contact-sub">Fill in the details below and we'll be in touch shortly.</p>
+
+                    <div class="form-group">
+                        <label for="name">Name</label>
+                        <input type="text" id="name" name="name" placeholder="Your full name" required />
+                    </div>
+
+                    <div class="form-group">
+                        <label for="email">Email</label>
+                        <input type="email" id="email" name="email" placeholder="you@company.com" required />
+                    </div>
+
+                    <div class="form-group">
+                        <label for="company">Company</label>
+                        <input type="text" id="company" name="company" placeholder="Company name" />
+                    </div>
+
+                    <div class="form-group">
+                        <label for="message">Message</label>
+                        <textarea id="message" name="message" placeholder="How can we help?"></textarea>
+                    </div>
+
+                    <button type="submit" class="form-submit">Send Message</button>
+                </form>
+
+                <!-- Success state -->
+                <div class="form-success" id="form-success">
+                    <div class="hero-label">Thank you</div>
+                    <h2>Message sent</h2>
+                    <p>We appreciate you reaching out. We'll get back to you shortly.</p>
+                </div>
+
+            </main>
+
+            <footer>
+                <div class="footer-locations">
+                    <span>New York</span>
+                    <span>Tel Aviv</span>
+                </div>
+                <div class="footer-copy">&copy; 2026 MoonPac Capital. All rights reserved.</div>
+            </footer>
+
+        </div>
+    </div>
+
+    <script>
+        function openContact() {
+            document.getElementById('contact-page').classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeContact() {
+            document.getElementById('contact-page').classList.remove('active');
+            document.body.style.overflow = '';
+        }
+
+        // Close on Escape key
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') closeContact();
+        });
+
+        // Handle form submission
+        document.getElementById('contact-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            var form = e.target;
+            var data = new FormData(form);
+
+            fetch('/', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                body: new URLSearchParams(data).toString()
+            })
+            .then(function() {
+                form.style.display = 'none';
+                document.getElementById('form-success').style.display = 'block';
+            })
+            .catch(function() {
+                // Fallback: mailto
+                var name = data.get('name');
+                var email = data.get('email');
+                var company = data.get('company');
+                var message = data.get('message');
+                var subject = 'MoonPac Contact: ' + name;
+                var body = 'Name: ' + name + '\nEmail: ' + email + '\nCompany: ' + company + '\n\n' + message;
+                window.location.href = 'mailto:yedidiah@aleph.vc?subject=' + encodeURIComponent(subject) + '&body=' + encodeURIComponent(body);
+            });
+        });
+    </script>
+
+</body>
+</html>
